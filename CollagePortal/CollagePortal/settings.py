@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'database.apps.DatabaseConfig',
 ]
 
 MIDDLEWARE = [
@@ -77,7 +78,7 @@ WSGI_APPLICATION = 'CollagePortal.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ce125',  # Name of the database*
+        'NAME': 'userdata',  # Name of the database*
         'USER': 'root',  # user name for the database
         'PASSWORD': '',  # password
         'HOST': 'localhost',  # IP address of the database
