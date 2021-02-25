@@ -1,10 +1,17 @@
 {% extends 'base.html' %} {% block content %} {% if form.errors %}
 <p class="error"> Invalid Username or Password </p>
-{% endif %}
-<form action="/loginmodule/auth/" method="post">{% csrf_token %}
-    <label for="username">Username : </label>
-    <input type="text" name="username" value="" id="username"><br>
-    <label for="password"> Password:</label>
-    <input type="password" name="password" value="" id="password"><br>
-    <input type="submit" value="login" /> {% endblock %}
-</form>
+{% endif %} {% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'loginmodule/style.css' %}">
+<center>
+    <form action="/loginmodule/auth/" method="post">{% csrf_token %}
+        <div class="container">
+            <label for="uname"><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" name="username" id="username" required><br>
+
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="password" id="password" required><br>
+
+            <button type="submit">Login</button>
+        </div>{% endblock %}
+        <center>
+    </form>
