@@ -5,6 +5,7 @@ from django.contrib import auth
 from django.template.context_processors import csrf
 
 
+
 def login(request):
     c = {}
     c.update(csrf(request))
@@ -23,7 +24,7 @@ def auth_view(request):
 
 
 def loggedin(request):
-    return render(request, 'loggedin.html', {"full_name": request.user.username})
+    return HttpResponseRedirect('/database/home/')
 
 
 def invalidlogin(request):
