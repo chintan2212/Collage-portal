@@ -1,32 +1,41 @@
 from django.db import models
+from django.contrib import auth 
+from django.contrib.auth.models import User 
 
+from django.contrib.auth.models import Group,GroupManager , Permission
 
 class Course(models.Model):
     Course_name = models.CharField(max_length=100)
    # Course_ID = models.CharField(max_length = 10 , primary_key=True )
     professor_name = models.CharField(max_length=100)
-    department = models.CharField(max_length=20)   
+    department = models.CharField(max_length=20)
 
 
-
-   # ID_NO = models.CharField(max_length=100, primary_key=True)
-    
-    
-class Class(models.Model):
+   # ID_NO = models.CharField(max_length=100, primary_key=True
+class Classes(models.Model):
     name = models.CharField(max_length=100)
-    Professor_name = models.CharField(max_length=100)
-    description = models.CharField(max_length=50, default="", editable=True)
+    Course = models.ForeignKey(Course,default="", on_delete=models.CASCADE)
+    description = models.CharField(max_length=50)
 # Create your models here.
+
+class Professor(models.Model):
+    user = models.OneToOneField(User,default="", on_delete=models.CASCADE)
+    department = models.CharField(max_length=100)   
+    Course = models.ManyToManyField(Course,default="")
+    
+
+class Student(models.Model):
+    user = models.OneToOneField(User,default="", on_delete=models.CASCADE)
+    department = models.CharField(max_length=100)   
+    Course = models.ManyToManyField(Course,default="")
+   
+    
 
 class Assignment(models.Model):
    # name= models.CharField(max_length=100)
     name = models.CharField(max_length=100)
-    #ofClass = models.ForeignKey(Class, on_delete=models.CASCADE)
     submitted = models.BooleanField()
+    Classes = models.ForeignKey(Classes,default="", on_delete=models.CASCADE)
 
-class User(models.Model):
-    Name = models.CharField(max_length=100)
-    #ID = models.CharField(max_length=100)
-   # Prof = models.BooleanField()
     #email = models.CharField(max_length=100)
     #enrolled = models.ManyToManyField(Class)

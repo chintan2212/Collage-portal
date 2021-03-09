@@ -31,18 +31,19 @@
 
 
 <div class="row"> 
-  {%for cl in classes%}
+  {% for cl in classes%}
   <div class="col">
+    
         <div class="card" style="width: 19rem;">
             <img class="card-img-top" src="..." alt="Card image cap">
             <div class="card-body">
               <h5 class="card-title">{{cl.name}}</h5>
-              <p class="card-text">{{cl.description}}</p>
+              <p class="card-text"></p>
               <a href="#" class="btn btn-primary">Open</a>
             </div>
 
-      
-    </div>
-</div>
-{% endfor %}
+          </div>
+        </div>
+        {%endfor%}
+
 
