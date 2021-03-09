@@ -7,21 +7,26 @@ class Course(models.Model):
     professor_name = models.CharField(max_length=100)
     department = models.CharField(max_length=20)   
 
-class Assignment(models.Model):
-   # name= models.CharField(max_length=100)
-    professor_name = models.CharField(max_length=100)
-    user_name = models.CharField(max_length=100)
-   # description = models.CharField(max_length = 200)
-    submitted = models.BooleanField()
-class User(models.Model):
-    Name = models.CharField(max_length=100)
+
+
    # ID_NO = models.CharField(max_length=100, primary_key=True)
     
     
 class Class(models.Model):
-    Courses = models.CharField(max_length=100)
-    Professor = models.CharField(max_length=100)
-    user = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
+    Professor_name = models.CharField(max_length=100)
+    description = models.CharField(max_length=50, default="", editable=True)
 # Create your models here.
 
+class Assignment(models.Model):
+   # name= models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
+    #ofClass = models.ForeignKey(Class, on_delete=models.CASCADE)
+    submitted = models.BooleanField()
 
+class User(models.Model):
+    Name = models.CharField(max_length=100)
+    #ID = models.CharField(max_length=100)
+   # Prof = models.BooleanField()
+    #email = models.CharField(max_length=100)
+    #enrolled = models.ManyToManyField(Class)
