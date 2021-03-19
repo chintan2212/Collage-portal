@@ -4,21 +4,25 @@ from django.http import HttpResponseRedirect
 from django.contrib import auth 
 from django.template.context_processors import csrf
 from django.contrib.auth.models import User
+from database.models import Course, Student
+
 
 
 
 def login(request):
+    courses = Course.objects.all()
     c = {}
     c.update(csrf(request))
-    return render(request, 'login.html', c)
+    return render(request, 'login.html', {'c':c ,'courses': courses} )
 
 
 
+                # messages.warning(request,"Invalid Username or Password")
 
 def auth_view(request):
     username = request.POST.get('username', '')
     password = request.POST.get('password', '')
-    user = auth.authenticate(username=username, password=password)
+    user = auth.authenticate(request,username=username, password=password)
     if user is not None:
         auth.login(request, user)
         return HttpResponseRedirect('/loginmodule/loggedin/')
@@ -27,13 +31,15 @@ def auth_view(request):
 
 def signup(request):
     username = request.POST.get('username', '')
-    password = request.POST.get('password', '')
+    password = request.POST.get('password1', '')
     email = request.POST.get('email','') 
-    if(request.POST.get('confirmpassword', '')!=password):
-        return HttpResponseRedirect('/loginmodule/invalidlogin/')
-    else:
-        user = User.objects.create_user(username, email, password)
-
+    user = User.objects.create_user(username, email, password)
+    student = Student.objects.create(user = user)
+    courses:Course
+    for c in Course.objects.all():
+        if(request.POST.get(c.Course_name),False):
+            student.Course.add(c)
+    return HttpResponseRedirect('/loginmodule/login/')
     
 
 

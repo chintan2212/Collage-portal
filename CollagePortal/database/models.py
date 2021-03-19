@@ -25,8 +25,7 @@ class Professor(models.Model):
     
 
 class Student(models.Model):
-    user = models.OneToOneField(User,default="", on_delete=models.CASCADE)
-    department = models.CharField(max_length=100)   
+    user = models.OneToOneField(User,default="", on_delete=models.CASCADE)   
     Course = models.ManyToManyField(Course,default="")   
 
 class Assignment(models.Model):

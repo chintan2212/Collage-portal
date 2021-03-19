@@ -1,5 +1,9 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
+<style>
+  p {
+      padding: 5px 7px 5px 9px;
+  }
+</style>
 
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -22,8 +26,8 @@
 
 <div class="row"> 
   {% for cl in classes%}
-  <div class="col">
-    
+  <div class="col px-md-5">
+    <p>
         <div class="card" style="width: 19rem;">
             <img class="card-img-top" src="https://i.pinimg.com/originals/dd/64/da/dd64da585bc57cb05e5fd4d8ce873f57.png" alt="Card image cap">
             <div class="card-body">
@@ -33,6 +37,8 @@
             </div>
 
           </div>
+          
+        </p>
         </div>
         {%endfor%}
 
