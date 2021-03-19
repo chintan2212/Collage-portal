@@ -13,6 +13,8 @@ def login(request):
     return render(request, 'login.html', c)
 
 
+
+
 def auth_view(request):
     username = request.POST.get('username', '')
     password = request.POST.get('password', '')
