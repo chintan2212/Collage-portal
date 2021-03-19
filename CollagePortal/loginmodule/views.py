@@ -25,6 +25,17 @@ def auth_view(request):
     else:
         return HttpResponseRedirect('/loginmodule/invalidlogin/')
 
+def signup(request):
+    username = request.POST.get('username', '')
+    password = request.POST.get('password', '')
+    email = request.POST.get('email','') 
+    if(request.POST.get('confirmpassword', '')!=password):
+        return HttpResponseRedirect('/loginmodule/invalidlogin/')
+    else:
+        user = User.objects.create_user(username, email, password)
+
+    
+
 
 def loggedin(request):
     return HttpResponseRedirect('/database/home/')
