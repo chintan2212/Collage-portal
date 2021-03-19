@@ -16,7 +16,7 @@
 
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="#">Assignments<span class="sr-only">(current)</span></a>
             </li>
         </ul>
     </div>
@@ -25,19 +25,18 @@
 <body style="background-color: slategray;"></body>
 
 <div class="row">
-    {% for cl in classes%}
     <div class="col px-md-5">
         <p>
-            <div class="card" style="width: 19rem;">
-                <img class="card-img-top" src="https://i.pinimg.com/originals/dd/64/da/dd64da585bc57cb05e5fd4d8ce873f57.png" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">{{cl.name}}</h5>
-                    <p class="card-text">{{cl.description}}</p>
-                    <a href="/loginmodule/assignment" class="btn btn-primary">Open</a>
+            <div class="card">
+                <div class="card-header">
+                    Assignment
                 </div>
-
+                <div class="card-body">
+                    <h5 class="card-title">(**TITLE of the assignment goes here**)</h5>
+                    <p class="card-text">(**Assignment description goes here**)</p>
+                    <a href="#" class="btn btn-primary">Submit Work</a>
+                </div>
             </div>
 
         </p>
     </div>
-    {%endfor%}
