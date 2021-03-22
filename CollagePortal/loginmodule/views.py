@@ -4,7 +4,10 @@ from django.http import HttpResponseRedirect
 from django.contrib import auth
 from django.template.context_processors import csrf
 from django.contrib.auth.models import User
-from database.models import Course, Student
+from database.models import Course, Student,Professor
+from django.db import IntegrityError
+from django.http import Http404
+from django.core.exceptions import ObjectDoesNotExist
 
 
 def login(request):
@@ -28,17 +31,24 @@ def auth_view(request):
 
 
 def signup(request):
-    username = request.POST.get('username', '')
-    password = request.POST.get('password1', '')
-    email = request.POST.get('email', '')
-    user = User.objects.create_user(username, email, password)
-    student = Student.objects.create(user=user)
-    courses: Course
-    for c in Course.objects.all():
-        if(request.POST.get(c.Course_name), False):
-            student.Course.add(c)
-    return HttpResponseRedirect('/loginmodule/login/')
-
+    try:
+        username = request.POST.get('username', '')
+        password = request.POST.get('password1', '')
+        email = request.POST.get('email', '')
+        user = User.objects.create_user(username, email, password)
+        if(request.POST.get('professor',False)):
+            profile = Professor.objects.create(user=user)
+        else:
+            profile = Student.objects.create(user=user)
+        courses = []
+        courses = request.POST.getlist('checks[]')
+        for c in courses:
+            cor=Course.objects.get(Course_name=c)
+            profile.Course.add(cor)
+        return HttpResponseRedirect('/loginmodule/login/')
+    except IntegrityError :
+        raise Http404("user already exists with this username")
+   
 
 def loggedin(request):
     return HttpResponseRedirect('/database/home/')

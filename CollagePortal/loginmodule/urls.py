@@ -11,5 +11,5 @@ urlpatterns = [
     url(r'^loggedin/$', loggedin),
     url(r'^invalidlogin/$', invalidlogin),
     url(r'^signup/$', signup),
-    url(r'^assignment/$', assignment),
+    
 ]

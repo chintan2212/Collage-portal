@@ -1,6 +1,11 @@
  {% extends 'base2.html' %} {% block content %}
 <center>
     <br><br>
+    {% if some_flag %}
+                                    <div id="some_flag" title="Some Flag">
+                                        <p>User with same username already exist</p>
+                                    </div>
+    {% endif %}
     <h2 style="color: red;"> Invalid user name or password! </h2>
     <p> Click <a href="/loginmodule/login/"> here </a> to login again. </p>
 </center>

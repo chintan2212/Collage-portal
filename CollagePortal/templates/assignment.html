@@ -6,8 +6,8 @@
 </style>
 
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">College Portal</a>
+<nav class="navbar navbar-expand-lg fixed-top navbar-light bg-light ">
+    <a class="navbar-brand" href="/database/home">College Portal</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -15,28 +15,38 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
+            
+            <li>
                 <a class="nav-link" href="#">Assignments<span class="sr-only">(current)</span></a>
             </li>
+              
         </ul>
     </div>
 </nav>
 
-<body style="background-color: slategray;"></body>
+<body style="background-color:  rgb(134, 163, 192);"></body>
 
-<div class="row">
-    <div class="col px-md-5">
-        <p>
-            <div class="card">
-                <div class="card-header">
-                    Assignment
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title">(**TITLE of the assignment goes here**)</h5>
-                    <p class="card-text">(**Assignment description goes here**)</p>
-                    <a href="#" class="btn btn-primary">Submit Work</a>
-                </div>
-            </div>
 
-        </p>
+
+
+<div class="jumbotron jumbotron-fluid ">
+    <div class="container mt-3">
+        <h1 class="mx-auto mt-4">{{assignment.name}}</h1>
+        <p class= "mt-3"><b>Aim</b> :<i> {{assignment.description}}</i></p>
+        <button class="btn" style="border-color:  rgb(134, 163, 192); border-radius: 10px; border-width: 5px;"><i class="fa fa-download"></i> Download PDF</button>
     </div>
+</div>
+
+
+<div class=" container ">
+    <form action="/database/assignments/{{assignment.Classes.name}}/{{assignment.id}}/submit">
+        <div class="col">
+            <div class="row">
+                <input type="file" id="myFile" name="filename"class="btn " ><i class="fa fa-download"></i>
+                <input type="submit"style="border-color:  rgb(134, 163, 192);border-radius: 10px; border-width: 5px;">
+            
+            </div>
+        </ul>
+    </form>
+</div>
+  

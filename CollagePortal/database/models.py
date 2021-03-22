@@ -6,44 +6,60 @@ from django.contrib.auth.models import Group,GroupManager , Permission
 
 class Course(models.Model):
     Course_name = models.CharField(max_length=100)
-   #Course_ID = models.CharField(max_length = 10 , primary_key=True )
-    professor_name = models.CharField(max_length=100)
     department = models.CharField(max_length=20)
-
-
-   # ID_NO = models.CharField(max_length=100, primary_key=True
-class Classes(models.Model):
-    name = models.CharField(max_length=100)
-    Course = models.ForeignKey(Course,default="", on_delete=models.CASCADE)
-    description = models.CharField(max_length=50)
-# Create your models here.
+    def getClasses(self):
+        return self.classes_set.all()
 
 class Professor(models.Model):
     user = models.OneToOneField(User,default="", on_delete=models.CASCADE)
-    department = models.CharField(max_length=100) 
-    Course = models.ManyToManyField(Course,default="")
-    
+    def getClasses(self):
+        return self.classes_set.all()
+class Classes(models.Model):
+    professor = models.ForeignKey(Professor,default="", on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    Course = models.ForeignKey(Course,default="", on_delete=models.CASCADE)
+    description = models.CharField(max_length=50)
+    def getAssignments(self):
+        return self.assignment_set.all()
 
 class Student(models.Model):
     user = models.OneToOneField(User,default="", on_delete=models.CASCADE)   
-    Course = models.ManyToManyField(Course,default="")   
-
-class Assignment(models.Model):
-   # name= models.CharField(max_length=100)
+    Course = models.ManyToManyField(Course,default="")
+    def getCourses(self):
+        return self.Course.all()   
+    def getClasses(self):
+        course = self.getCourses()
+        classes = []
+        for cors in course:
+            cl = cors.getClasses()
+            classes.extend(cl)
+        return classes
+class Assignment(models.Model):# name= models.CharField(max_length=100)
     name = models.CharField(max_length=100)
-    submitted = models.BooleanField(default=False)
     Classes = models.ForeignKey(Classes,default="", on_delete=models.CASCADE)
     FILE = models.FileField(blank =True, null =True,upload_to="Assignments/")
     description = models.CharField(max_length=50,default="")
-     
+    def create(self,_name,_class):
+        assignment=Assignment.objects.create(name=_name ,classes= _class)
+        students_subscribed = self.Classes.Course.student_set.all()
+        for student in students_subscribed:
+            '''
+            creates a submission link for all students and assignment
+            '''
+            submission=Submission.objects.create(assignment = self,student = student)
+        return 
+    def getNotSubmitted(self):
+        submissions = self.submission_set.all()
+        not_submitted=[]
+        for submission in submissions:
+            if(submission.submitted==False):
+                not_submitted.append(submission)
+        return not_submitted
 
 class Submission(models.Model):
     assignment = models.ForeignKey(Assignment,default="", on_delete=models.CASCADE) 
     student = models.ForeignKey(Student,default="", on_delete=models.CASCADE) 
+    submitted = models.BooleanField(default=False)
     date = models.DateTimeField()
     FILE = models.FileField(blank =True, null =True,upload_to="Submissions/")
-
-
-
-    #email = models.CharField(max_length=100)
-    #enrolled = models.ManyToManyField(Class)
+    remarks = models.TextField(max_length=255,default="None")
