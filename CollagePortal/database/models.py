@@ -9,6 +9,8 @@ class Course(models.Model):
     department = models.CharField(max_length=20)
     def getClasses(self):
         return self.classes_set.all()
+    def getStudents(self):
+        return self.student_set.all()
 
 class Professor(models.Model):
     user = models.OneToOneField(User,default="", on_delete=models.CASCADE)
@@ -39,27 +41,30 @@ class Assignment(models.Model):# name= models.CharField(max_length=100)
     Classes = models.ForeignKey(Classes,default="", on_delete=models.CASCADE)
     FILE = models.FileField(blank =True, null =True,upload_to="Assignments/")
     description = models.CharField(max_length=50,default="")
-    def create(self,_name,_class):
-        assignment=Assignment.objects.create(name=_name ,classes= _class)
-        students_subscribed = self.Classes.Course.student_set.all()
+    @classmethod
+    def add(cls,_name,_class,desc = 'NO Description',FILE = None):
+        assignment=Assignment.objects.create(name=_name ,Classes= _class, description= desc,FILE= FILE)
+        students_subscribed = _class.Course.getStudents()
         for student in students_subscribed:
             '''
             creates a submission link for all students and assignment
             '''
-            submission=Submission.objects.create(assignment = self,student = student)
+            submission=Submission.objects.create(assignment = assignment,student = student)
         return 
+    
+    
     def getNotSubmitted(self):
         submissions = self.submission_set.all()
         not_submitted=[]
         for submission in submissions:
             if(submission.submitted==False):
-                not_submitted.append(submission)
+                not_submitted.append(submission.student)
         return not_submitted
 
 class Submission(models.Model):
     assignment = models.ForeignKey(Assignment,default="", on_delete=models.CASCADE) 
     student = models.ForeignKey(Student,default="", on_delete=models.CASCADE) 
     submitted = models.BooleanField(default=False)
-    date = models.DateTimeField()
+    date = models.DateTimeField(null=True)
     FILE = models.FileField(blank =True, null =True,upload_to="Submissions/")
     remarks = models.TextField(max_length=255,default="None")

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from django.http import HttpResponseRedirect,HttpResponse
+from django.http import HttpResponseRedirect,HttpResponse , Http404
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.template.context_processors import csrf
@@ -34,14 +34,35 @@ def assignment(request,class_name):
     for c in assign:
         assignments.append(c)
     #return HttpResponse("<h1>{}.</h1>".format(assignments[1].name))
-    return render(request, 'assignment_card.html',{'assignments': assignments})
+    return render(request, 'assignment_card.html',{'assignments': assignments,'classes':_class})
 # request.user.details.get().favourites.add(article)
+
 def openAssignment(request,class_name,lab_id):
     assignment= Assignment.objects.get(id=lab_id)
     return render(request, 'assignment.html',{'assignment': assignment})
 
+def addAssignment(request,class_name):
+    try :
+        request.user.proffessor
+    except ObjectDoesNotExist:
+        return Http404("you are not a proffessor")
+    _name='' #input name
+    _class = Classes.objects.get(name=class_name)
+    desc=' ' 
+    FILE = None
+    Assignment.add(_name,_class,desc,FILE)
+    return HttpResponseRedirect('/database/assignments/'+class_name)
+    
+
+# imcomplete
 def submit(request,class_name,lab_id):
     temp_file = ContentFile()
     assignment= Assignment.objects.get(id = lab_id)
     submission = Assignment.submission_set.get(student = request.user.student)
     submission.FILE.save(f'{request.user+assignment.name}.pdf', temp_file)
+    return HttpResponseRedirect('/database/assignments'+class_name+'/'+lab_id)
+
+def notSubmittedList(request,class_name,lab_id):
+    assignment= Assignment.objects.get(id = lab_id)
+    not_submitted = assignment.getNotSubmitted()
+    
