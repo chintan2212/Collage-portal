@@ -34,21 +34,27 @@
 
 <body style="background-color:  rgb(134, 163, 192);"></body>
 
-<div class=" row  mx-auto mt-auto">
-    {% for assignment in assignments %}
-    <div class="col px-md-5">
-        <p>
-            <div class="card mt-auto">
-                <div class="card-header">
-                   <h2> Assignment</h2>
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title">{{assignment.name}}</h5>
-                    <p class="card-text">{{assignment.description}}</p>
-                    <a href="{{assignment.Classes.name}}/{{assignment.id}}" class="btn btn-primary">Submit Work</a>
-                </div>
-            </div>
-
-        </p>
-    </div>
-    {%endfor%}
+<table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">UserID</th>
+        <th scope="col">submittion</th>
+        <th scope="col">date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="table-success">
+        <th scope="row">1</th>
+        <td>Mark</td>
+        <td><button class="btn"><i class="fa fa-download"></i> Download</button></td>
+        <td>dates</td>
+      </tr>
+      <tr class="table-danger">
+        <th scope="row">1</th>
+        <td>Mark</td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>

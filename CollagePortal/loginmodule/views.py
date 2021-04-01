@@ -63,6 +63,6 @@ def logout(request):
     return render(request, 'logout.html')
 
 
-def assignment(request):
-    return render(request, 'assignment.html')
+def Test(request):
+    return render(request, 'table_submission.html')
 # Create your views here.

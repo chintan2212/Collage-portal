@@ -1,4 +1,4 @@
-from loginmodule.views import assignment
+
 from django.urls import path
 from database.views import home, assignment ,openAssignment,addAssignment
 from django.contrib.auth import views as auth_views

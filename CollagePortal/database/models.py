@@ -51,11 +51,17 @@ class Assignment(models.Model):# name= models.CharField(max_length=100)
             '''
             submission=Submission.objects.create(assignment = assignment,student = student)
         return 
-    
+    def getSubmitted(self):
+        Submission =  self.submission_set.all()
+        submitted =[]
+        for submission in Submission:
+            if(submission.submitted==True):
+                submitted.append(submission)
+        return submitted #submit model
     
     def getNotSubmitted(self):
         submissions = self.submission_set.all()
-        not_submitted=[]
+        not_submitted=[] # student model
         for submission in submissions:
             if(submission.submitted==False):
                 not_submitted.append(submission.student)

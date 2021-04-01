@@ -56,13 +56,19 @@ def addAssignment(request,class_name):
 
 # imcomplete
 def submit(request,class_name,lab_id):
-    temp_file = ContentFile()
-    assignment= Assignment.objects.get(id = lab_id)
-    submission = Assignment.submission_set.get(student = request.user.student)
-    submission.FILE.save(f'{request.user+assignment.name}.pdf', temp_file)
-    return HttpResponseRedirect('/database/assignments'+class_name+'/'+lab_id)
+    try:
+        temp_file = ContentFile()
+        assignment= Assignment.objects.get(id = lab_id)
+        submission = Assignment.submission_set.get(student = request.user.student)
+        # submission.FILE.save(f'{request.user+assignment.name}.pdf', temp_file)
+        return HttpResponseRedirect('/database/assignments'+class_name+'/'+lab_id)
+    except Exception:
+        return Http404("Submission failed resubmit by reloading previous page")
 
-def notSubmittedList(request,class_name,lab_id):
+
+
+def list_students(request,class_name,lab_id): # left to be implemented
     assignment= Assignment.objects.get(id = lab_id)
     not_submitted = assignment.getNotSubmitted()
-    
+    submitted = assignment.getSubmitted()
+    #render()
