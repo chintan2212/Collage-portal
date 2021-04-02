@@ -35,30 +35,33 @@ def assignment(request,class_name):
     assign = _class.assignment_set.all()
     for c in assign:
         assignments.append(c)
-    #return HttpResponse("<h1>{}.</h1>".format(assignments[1].name))
     return render(request, 'assignment_card.html',{'assignments': assignments,'classes':_class})
-# request.user.details.get().favourites.add(article)
+
 
 def openAssignment(request,class_name,lab_id):
     assignment= Assignment.objects.get(id=lab_id)
-    return render(request, 'assignment.html',{'assignment': assignment})
+    flag = True
+    try :
+        request.user.professor
+    except ObjectDoesNotExist:
+        flag = False
+    return render(request, 'assignment.html',{'assignment': assignment, 'prof' :flag})
 
 def submit(request,class_name,lab_id):
     try:
         student = request.user.student
         assignment= Assignment.objects.get(id = lab_id)
     except ObjectDoesNotExist:
-        return Http404("youre not a student")
+        return Http404("youre not a student or assignment doesnt exist")
     FILE = request.FILES['myfile']
     if (FILE  != None):
         submitted = True
         Submission.add(assignment,student ,submitted,FILE)
-    return HttpResponseRedirect('/database/assignments/'+class_name+'/'+lab_id)
+    return HttpResponseRedirect('/database/assignments/'+class_name)
 
 def addAssignment(request,class_name):
     try :
-       pass
-    #request.user.professor
+        request.user.professor
     except ObjectDoesNotExist:
         return Http404("you are not a proffessor")
     _name=request.POST['assignment_name'] #input name
@@ -70,16 +73,17 @@ def addAssignment(request,class_name):
     
 def removeAssignment(request,class_name,lab_id):
     try :
-        request.user.professor
+        pass
+        #request.user.professor
     except ObjectDoesNotExist:
         return Http404("you are not a proffessor")
     assignment= Assignment.objects.get(id = lab_id).delete()
     return HttpResponseRedirect('/database/assignments/'+class_name)
-# imcomplete
+
 
 
 def list_students(request,class_name,lab_id): # left to be implemented
     assignment= Assignment.objects.get(id = lab_id)
-    not_submitted = assignment.getNotSubmitted()
+    not_submitted = []
     submitted = assignment.getSubmitted()
     return render(request, 'table_submission.html',{'submitted': submitted,'not_submitted': not_submitted})

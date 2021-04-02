@@ -52,7 +52,7 @@ class Assignment(models.Model):# name= models.CharField(max_length=100)
             if(submission.submitted==True):
                 submitted.append(submission)
         return submitted #submit model
-    
+    '''
     def getNotSubmitted(self):
         students=self.Classes.Course.student_set.all()
         submitted= self.getSubmitted()
@@ -66,8 +66,8 @@ class Assignment(models.Model):# name= models.CharField(max_length=100)
             if(flag):
                 not_submitted.append(sub.student)
                 flag=False
-        return not_submitted
-
+        return not_submitted''' 
+    
 class Submission(models.Model):
     assignment = models.ForeignKey(Assignment,default="", on_delete=models.CASCADE) 
     student = models.ForeignKey(Student,default="", on_delete=models.CASCADE) 
