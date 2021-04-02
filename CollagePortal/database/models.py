@@ -39,18 +39,12 @@ class Student(models.Model):
 class Assignment(models.Model):# name= models.CharField(max_length=100)
     name = models.CharField(max_length=100)
     Classes = models.ForeignKey(Classes,default="", on_delete=models.CASCADE)
-    FILE = models.FileField(blank =True, null =True,upload_to="Assignments/")
+    FILE = models.FileField(blank =True, default ='',upload_to="Assignments/")
     description = models.CharField(max_length=50,default="")
     @classmethod
     def add(cls,_name,_class,desc = 'NO Description',FILE = None):
         assignment=Assignment.objects.create(name=_name ,Classes= _class, description= desc,FILE= FILE)
-        students_subscribed = _class.Course.getStudents()
-        for student in students_subscribed:
-            '''
-            creates a submission link for all students and assignment
-            '''
-            submission=Submission.objects.create(assignment = assignment,student = student)
-        return 
+
     def getSubmitted(self):
         Submission =  self.submission_set.all()
         submitted =[]
@@ -60,17 +54,27 @@ class Assignment(models.Model):# name= models.CharField(max_length=100)
         return submitted #submit model
     
     def getNotSubmitted(self):
-        submissions = self.submission_set.all()
-        not_submitted=[] # student model
-        for submission in submissions:
-            if(submission.submitted==False):
-                not_submitted.append(submission.student)
+        students=self.Classes.Course.student_set.all()
+        submitted= self.getSubmitted()
+        not_submitted=[]
+        flag:True # student model
+        for stu in students:
+            for sub in submitted:
+                if(stu == sub.student):
+                    flag=False
+                    break
+            if(flag):
+                not_submitted.append(sub.student)
+                flag=False
         return not_submitted
 
 class Submission(models.Model):
     assignment = models.ForeignKey(Assignment,default="", on_delete=models.CASCADE) 
     student = models.ForeignKey(Student,default="", on_delete=models.CASCADE) 
     submitted = models.BooleanField(default=False)
-    date = models.DateTimeField(null=True)
-    FILE = models.FileField(blank =True, null =True,upload_to="Submissions/")
+    date = models.DateTimeField(auto_now_add=True)
+    FILE = models.FileField(blank =True,upload_to="Submissions/")
     remarks = models.TextField(max_length=255,default="None")
+    @classmethod
+    def add(cls,_assignment,_student,Submitted,FILE):
+        submission=Submission.objects.create(assignment=_assignment ,student= _student, submitted= Submitted,FILE= FILE)

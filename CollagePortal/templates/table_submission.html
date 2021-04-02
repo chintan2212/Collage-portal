@@ -44,17 +44,25 @@
       </tr>
     </thead>
     <tbody>
+      {% for sub in submitted %}
       <tr class="table-success">
         <th scope="row">1</th>
-        <td>Mark</td>
-        <td><button class="btn"><i class="fa fa-download"></i> Download</button></td>
-        <td>dates</td>
+        <td>{{sub.student.user.username}}</td>
+        <td><form action="{{sub.FILE.url}}">
+          <button class="btn"><i class="fa fa-download"></i> Download</button></td>
+        </form>
+          
+        <td>{{sub.date}}</td>
       </tr>
-      <tr class="table-danger">
+      {%endfor%}
+      {% for nsub in not_submitted %}
+      <tr class="table-success">
         <th scope="row">1</th>
-        <td>Mark</td>
+        <td>{{nsub.user.username}}</td>
         <td></td>
+        </form> 
         <td></td>
       </tr>
+      {%endfor%} 
     </tbody>
   </table>

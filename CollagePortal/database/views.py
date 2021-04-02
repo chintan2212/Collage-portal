@@ -1,13 +1,16 @@
+
+import datetime
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect,HttpResponse , Http404
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.template.context_processors import csrf
-from .models import Classes, Course, Student, Assignment
+from .models import Classes, Course, Student, Assignment , Submission
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
+from django.core.files.storage import FileSystemStorage
 # Create your views here.
 
 
@@ -26,7 +29,6 @@ def home(request):
     return render(request, "index.html", {'classes': classes})
 
 
-
 def assignment(request,class_name):
     assignments = []
     _class = Classes.objects.get(name=class_name)     
@@ -41,34 +43,43 @@ def openAssignment(request,class_name,lab_id):
     assignment= Assignment.objects.get(id=lab_id)
     return render(request, 'assignment.html',{'assignment': assignment})
 
+def submit(request,class_name,lab_id):
+    try:
+        student = request.user.student
+        assignment= Assignment.objects.get(id = lab_id)
+    except ObjectDoesNotExist:
+        return Http404("youre not a student")
+    FILE = request.FILES['myfile']
+    if (FILE  != None):
+        submitted = True
+        Submission.add(assignment,student ,submitted,FILE)
+    return HttpResponseRedirect('/database/assignments/'+class_name+'/'+lab_id)
+
 def addAssignment(request,class_name):
     try :
-        request.user.proffessor
+       pass
+    #request.user.professor
     except ObjectDoesNotExist:
         return Http404("you are not a proffessor")
-    _name='' #input name
+    _name=request.POST['assignment_name'] #input name
     _class = Classes.objects.get(name=class_name)
-    desc=' ' 
-    FILE = None
+    desc=request.POST['assignment_disc'] 
+    FILE =request.FILES['file']
     Assignment.add(_name,_class,desc,FILE)
     return HttpResponseRedirect('/database/assignments/'+class_name)
     
-
+def removeAssignment(request,class_name,lab_id):
+    try :
+        request.user.professor
+    except ObjectDoesNotExist:
+        return Http404("you are not a proffessor")
+    assignment= Assignment.objects.get(id = lab_id).delete()
+    return HttpResponseRedirect('/database/assignments/'+class_name)
 # imcomplete
-def submit(request,class_name,lab_id):
-    try:
-        temp_file = ContentFile()
-        assignment= Assignment.objects.get(id = lab_id)
-        submission = Assignment.submission_set.get(student = request.user.student)
-        # submission.FILE.save(f'{request.user+assignment.name}.pdf', temp_file)
-        return HttpResponseRedirect('/database/assignments'+class_name+'/'+lab_id)
-    except Exception:
-        return Http404("Submission failed resubmit by reloading previous page")
-
 
 
 def list_students(request,class_name,lab_id): # left to be implemented
     assignment= Assignment.objects.get(id = lab_id)
     not_submitted = assignment.getNotSubmitted()
     submitted = assignment.getSubmitted()
-    #render()
+    return render(request, 'table_submission.html',{'submitted': submitted,'not_submitted': not_submitted})
