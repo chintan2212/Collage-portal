@@ -1,0 +1,80 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<style>
+    p {
+        padding: 5px 7px 5px 9px;
+    }
+    
+    body {
+        padding-top: 60px;
+    }
+</style>
+
+
+<nav class="navbar navbar-expand-lg fixed-top navbar-light bg-light ">
+    <a class="navbar-brand" href="/database/home">College Portal</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        <ul class="navbar-nav mr-auto">
+
+            <li>
+                <a class="nav-link" href="#">Assignments<span class="sr-only">(current)</span></a>
+            </li>
+            {% if prof %}
+
+            <li>
+                <a href="{{assignment.id}}/list">
+                    <img src="https://image.flaticon.com/icons/png/512/114/114903.png" width="40" height="40" class="rounded-circle">
+                </a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li>
+                <a href="{{assignment.id}}/delete">
+                    <img src="https://icon-library.com/images/delete-icon/delete-icon-14.jpg" width="40" height="40" class="rounded-circle">
+                </a>
+            </li>
+            <li>
+                <a class="nav-link" href="/loginmodule/login">Logout</a>
+            </li>
+        </ul>
+        {%endif%}
+
+
+
+    </div>
+</nav>
+
+<body style="background-color:  rgb(134, 163, 192);"></body>
+
+
+
+
+<div class="jumbotron jumbotron-fluid ">
+    <div class="container mt-3">
+        <h1 class="mx-auto mt-4">{{assignment.name}}</h1>
+        <p class="mt-3"><b>Aim</b> :<i> {{assignment.description}}</i></p>
+
+        <form action="{{assignment.FILE.url}}">
+            <button onclick="{{assignment.FILE.path}}" class="btn" style="border-color:  rgb(134, 163, 192); border-radius: 10px; border-width: 5px;"><i class="fa fa-download"></i> Download PDF</button>
+        </form>
+    </div>
+</div>
+
+
+<div class=" container ">
+    <form action="{{assignment.id}}/submit" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="col">
+            <div class="row">
+
+                <input type="file" name="myfile" class="btn ">
+                <input type="submit" style="border-color:  rgb(134, 163, 192);border-radius: 10px; border-width: 5px;">
+
+            </div>
+            </ul>
+    </form>
+    </div>
